@@ -1,0 +1,495 @@
+{
+  "name": "AI Lead Machine Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Machine",
+        "formDescription": "Provide the Info Below",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Business Type",
+              "placeholder": "e.g. Plumber",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Location",
+              "placeholder": "e.g. Rome, Italy",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Lead Number",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email Style",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Friendly"
+                  },
+                  {
+                    "option": "Professional"
+                  },
+                  {
+                    "option": "Simple"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "email",
+              "fieldType": "email",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "GO 🚀"
+        }
+      },
+      "id": "315bf924-33b1-4dfb-98a5-c6a76fe623d0",
+      "name": "On form submission",
+      "type": "n8n-nodes-base.formTrigger",
+      "position": [
+        -1648,
+        112
+      ],
+      "webhookId": "5a5df1fe-2356-43a1-aa16-c842f45d54f2",
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "text": "=Website: {{ $json.website }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Email Address",
+              "description": "=find out the best only one email address from the website after scraping the website. The mail address have to be in ideal format.",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0d937f8c-786c-4f8b-a588-da0772ce8aec",
+      "name": "Information Extractor",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "position": [
+        -1680,
+        400
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c3ecdb33-df83-47d7-94a0-0829a0626bcc",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -1680,
+        608
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0906e21a-0958-433e-b400-8694915ef3c9",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json[\"Business Type\"] }}",
+              "rightValue": ""
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "44d3a46a-eed8-429d-9e2d-0cecec4e275e",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        -1136,
+        112
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "0601f2d2-2522-471e-9e11-29498a47e19a",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "leftValue": "={{ $json.output['Email Address'] }}",
+              "rightValue": "@"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd64379b-e383-40be-a51f-79b2dd4dbc21",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -1376,
+        432
+      ],
+      "typeVersion": 2.2,
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "9cb0cbb8-6a9f-4c92-8b8b-e2809d228667",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        -1072,
+        624
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Getting the Email Address",
+        "height": 368,
+        "width": 1136,
+        "color": 4
+      },
+      "id": "03f79bad-a7fd-47b3-99fe-bb9641096ca3",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1904,
+        384
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Edit Fields1').item.json.email }}",
+        "subject": "={{ $('Information Extractor1').item.json.output['Mail Subject'] }}",
+        "emailType": "text",
+        "message": "={{ $json.output['Mail Body'] || \"Default test email body. This is a test automation from n8n.\" }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "e4c79fda-b5e0-4e43-b071-e0de76233c5d",
+      "name": "Send a message",
+      "type": "n8n-nodes-base.gmail",
+      "maxTries": 2,
+      "position": [
+        -720,
+        880
+      ],
+      "webhookId": "9ce15ceb-1aeb-4dd7-b269-f981f431c05f",
+      "executeOnce": false,
+      "retryOnFail": false,
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "rUdjBz4KJvXBpjTp",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "text": "=You are a perfect cold mail generator for a Digital Marketing Agency named Upward Engine.\n\nHere's the Information about the Recipient:\n\nCompany Name: {{ $('Loop Over Items').item.json['Company Name'] }}\nBusiness Type: {{ $('Loop Over Items').item.json.Category }}\n\nEmail Style / Email Tune : {{ $json['Email Style'] }}\n\nThe Email style is given just to understand how the mail will be.\n\nInstructions:\n\n1. Always start with giving a greting to the Company like Hi Company Name,\n2. Always use We not I.\n3. Mail have to be professional, Clean and to the point\n4. At last give a Signeture Like:\n   [Your Name]\n  [Your Company/Agency Name]",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Mail Subject",
+              "description": "Eye catchy mail Subject for the cold mail",
+              "required": true
+            },
+            {
+              "name": "Mail Body",
+              "description": "=body message of the mail, a perfect and clear cold mail.",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3e5a17ab-46d8-405a-9941-999e32dc36d3",
+      "name": "Information Extractor1",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "position": [
+        -1360,
+        880
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "# Email Send",
+        "height": 448,
+        "width": 2096,
+        "color": 5
+      },
+      "id": "7084b2d3-ff6e-4549-bd9f-1cbf5159fb51",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2176,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8ab73a5e-6659-4615-9f03-a1b3dacaa42e",
+              "name": "Send Time",
+              "type": "string",
+              "value": "={{$now.toFormat(\"MM-dd-yyyy (h:mm a)\")}}"
+            },
+            {
+              "id": "a39ae941-8d1c-4e6a-9d02-079ff9a71858",
+              "name": "email",
+              "value": "={{ $('On form submission').item.json.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d72953d2-da24-4452-a352-db83c4cc0b35",
+      "name": "Edit Fields1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -944,
+        880
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "99b4673b-ce15-45dd-99b5-182511d43b1a",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -2112,
+        864
+      ],
+      "notesInFlow": false,
+      "typeVersion": 3,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "b6c08358-2064-431d-bfce-75919764186d",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -1680,
+        880
+      ],
+      "webhookId": "a8a457d5-f88d-451c-ac51-1af17c8435b0",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -1472,
+        1024
+      ],
+      "id": "c2c4667c-e968-4f8d-9fc7-9ae42c30d3e4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e3d1e2c3-32e0-471e-af54-a39146359672",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8ddf7be5ca18279a701d2c87f93f23055abeb6f332951f34a4d4c0cabc502f43"
+  },
+  "nodeGroups": [],
+  "id": "shSj5t4J6OmMPBzj",
+  "tags": []
+}
