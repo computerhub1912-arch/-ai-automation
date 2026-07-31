@@ -1,0 +1,139 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "621bd440-99fb-414a-b3cb-61adab760768",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3a8edd7d-52d8-4a21-ab80-f720c7dcbca2",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const setup = $input.item.json.setup;\nconst punchline = $input.item.json.punchline;\n\nreturn [{\n  json: {\n    formatted_joke: `🎭 JOKE OF THE DAY\\n❓ ${setup}\\n😂 ${punchline}`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d7c1cdea-b6f0-4793-b7ea-b70364c357aa",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "areebabid258@gmail.com",
+        "subject": "🎭 Joke of the Day!",
+        "emailType": "text",
+        "message": "={{ $json.formatted_joke }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7f5c2bdf-aff7-4c3a-88d1-8729b54030a1",
+      "name": "Send a message",
+      "webhookId": "ebb8fb5a-4b53-4c5a-bcff-e4118663a619",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "rUdjBz4KJvXBpjTp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        512,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "8268c0d7-ad5c-4ae0-add4-93788d2e5d2b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        512,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "f7e2cb57-ec6b-4437-9f51-b36885a36066",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "433dbc6c-92a7-4621-8c33-896eebe7a169",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8ddf7be5ca18279a701d2c87f93f23055abeb6f332951f34a4d4c0cabc502f43"
+  },
+  "nodeGroups": [],
+  "id": "8oITAGnAfpLXGTX6",
+  "tags": []
+}
