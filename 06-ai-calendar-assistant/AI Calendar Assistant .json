@@ -1,0 +1,150 @@
+{
+  "name": "AI Calendar Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ef3dcb6a-fc6a-428a-9eba-b801c5ea5eb1",
+      "name": "When chat message received",
+      "webhookId": "6c614751-cd68-4d1d-bd06-9110b7b32f8b"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a helpful calendar assistant. The current date and time is {{ $now }}. Always use this as the reference point when calculating relative dates like \"today\", \"tomorrow\", \"next week\", or \"in 3 days\". Never assume a different year — always calculate based on the current date provided above."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "74da1a77-b190-492d-8397-2e37b7266bc7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        192
+      ],
+      "id": "bb3901fe-a868-4cbc-b7dd-d5c0a102001d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "areebabid258@gmail.com",
+          "mode": "list",
+          "cachedResultName": "areebabid258@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "attendees": [
+            "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('attendees0_Attendees', ``, 'string') }}"
+          ],
+          "conferenceDataUi": {
+            "conferenceDataValues": {
+              "conferenceSolution": "hangoutsMeet"
+            }
+          },
+          "sendUpdates": "=all",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        },
+        "remindersUi": {
+          "remindersValues": [
+            {
+              "method": "popup",
+              "minutes": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        160
+      ],
+      "id": "09864667-19fb-4fe5-a7cc-4af157ae9a5a",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "GfKc5G8slyFeBu1t",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "4d0c331e-a66d-4bac-bc16-f4e3fb20d635",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8ddf7be5ca18279a701d2c87f93f23055abeb6f332951f34a4d4c0cabc502f43"
+  },
+  "nodeGroups": [],
+  "id": "hrgWZSdbd4N8xpuY",
+  "tags": []
+}
