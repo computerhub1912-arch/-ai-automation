@@ -1,0 +1,648 @@
+{
+  "name": "workflow.json",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "social-post",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -432,
+        -192
+      ],
+      "id": "2d4acfa2-38fd-4ecc-8351-59f0ba3cba3f",
+      "name": "Webhook1",
+      "webhookId": "4a4b3d05-2408-4ea9-9be4-31f6a5888061"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "04aab0d4-8246-4222-a72d-a2cc9b982e52",
+              "leftValue": "={{$json.body.mode}}",
+              "rightValue": "ALL",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        -48
+      ],
+      "id": "6ce13507-d8d4-4b46-b2a9-dcc2950fcfd1",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -304
+      ],
+      "id": "13e1ee15-1f3f-4dc0-af02-179ce5149f8f",
+      "name": "Facebook"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -176
+      ],
+      "id": "484d03f7-e0af-45b3-87ac-196fa07c31e5",
+      "name": "Instagram"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -48
+      ],
+      "id": "9fee74e8-c0c8-48ea-814e-7cf140a21172",
+      "name": "x"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        256,
+        80
+      ],
+      "id": "ee8cf96b-64b8-46d0-9596-c9564aba203b",
+      "name": "LinkedIn"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "89ad09aa-01e5-4337-801f-444f9a82ae8f",
+              "leftValue": "={{$json.body.instagram}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        240
+      ],
+      "id": "1ffe9d79-0c18-49f0-b3e5-b7d6a2605b4f",
+      "name": "If (instagram)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8f46059e-dfb6-449b-a688-17ef3b819a85",
+              "leftValue": "={{$json.body.facebook}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        96
+      ],
+      "id": "c784701a-b334-45f3-95c5-ffc3dbea43ca",
+      "name": "If (Facebook)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ba80d205-2271-40cf-a7a7-0a64e1e57406",
+              "leftValue": "={{$json.body.x}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        384
+      ],
+      "id": "f258b434-826f-4aff-9677-7a7e2618593f",
+      "name": "If x(Twitter)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c38bc32-10e3-4d95-b1f5-1f86ca242c5e",
+              "leftValue": "={{$json.body.linkedin}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        528
+      ],
+      "id": "a18e5dcc-3d33-41d5-a4cf-4cfd9503e743",
+      "name": "If (LinkedIn)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75925327-a354-40e0-9044-9454bcb0f2fd",
+              "name": "status ",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "4ec34fe9-c1ab-4811-95d4-4204a2a6b79e",
+              "name": "message",
+              "value": "Post processed successfully",
+              "type": "string"
+            },
+            {
+              "id": "6cad0547-e015-46bb-800d-56f2d3816f83",
+              "name": "posting_mode",
+              "value": "specific",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        80
+      ],
+      "id": "de6c26d4-ded0-4e3a-bb1a-e0557a5b68b6",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5abf371d-ea95-4e93-8838-652aea67aa78",
+              "name": "status ",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "b8c8d5c9-27fc-487a-a630-9bd6a11469fe",
+              "name": "message",
+              "value": "Post processed successfully",
+              "type": "string"
+            },
+            {
+              "id": "4023ce91-ecd6-4cbb-b503-3527e0467de7",
+              "name": "posting_mode",
+              "value": "specific",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        224
+      ],
+      "id": "0010e9a0-036b-4873-8ba8-61c4b0f2124b",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4359f75e-c6c1-45e0-a2fd-d536198402e4",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "939fc9c7-a387-4839-a26f-7b7e7ec60bea",
+              "name": "message",
+              "value": "Post processed successfully",
+              "type": "string"
+            },
+            {
+              "id": "cf488f94-3174-46fc-a66f-eb0c5ae7e31d",
+              "name": "posting_mode",
+              "value": "specific",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        368
+      ],
+      "id": "0e041ea5-38aa-4cec-a044-57ad5c353f4d",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cc27b3c5-ca58-4a9d-ab6b-faa6ae30b3e0",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "074f7d3e-fe9e-4933-9c6b-8a7aa7330284",
+              "name": "message",
+              "value": "Post processed successfully",
+              "type": "string"
+            },
+            {
+              "id": "e32c1f05-53c6-4dfa-8b1c-598c6a641f2b",
+              "name": "posting_mode",
+              "value": "specific",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        512
+      ],
+      "id": "1cef38e8-187c-4116-9881-45891b3b1187",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn [\n  {\n    json: {\n      platform: \"Facebook\",\n      title: data.title,\n      content: data.content,\n      status: \"READY_TO_PUBLISH\",\n      message: \"Facebook post processed successfully\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -304
+      ],
+      "id": "c533b0e0-e2f5-4693-a412-a51a6d8120de",
+      "name": "Fcebook Post Ready"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn [\n  {\n    json: {\n      platform: \"Instagram\",\n      title: data.title,\n      content: data.content,\n      status: \"READY_TO_PUBLISH\",\n      message: \"Instagram post processed successfully\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -176
+      ],
+      "id": "6811f8f7-2753-4565-a35c-4d57b9c47828",
+      "name": "Instagram Post Ready"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn [\n  {\n    json: {\n      platform: \"X\",\n      title: data.title,\n      content: data.content,\n      status: \"READY_TO_PUBLISH\",\n      message: \"X post processed successfully\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -48
+      ],
+      "id": "2e0c1bc0-07e0-4e10-80d5-49bd529d8cd9",
+      "name": "X Post Ready"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nreturn [\n  {\n    json: {\n      platform: \"LinkedIn\",\n      title: data.title,\n      content: data.content,\n      status: \"READY_TO_PUBLISH\",\n      message: \"LinkedIn post processed successfully\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        80
+      ],
+      "id": "3bd71dde-610c-4e57-a1df-f4964c8d1352",
+      "name": "LinkedIn Post Ready"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6cc16fca-dcb5-4554-a9a4-1023e7bd249e",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "401f316f-75d6-4d65-ad7c-f8fd49a69dd2",
+              "name": "message",
+              "value": "Post processed successfully",
+              "type": "string"
+            },
+            {
+              "id": "5d0a8088-8c4f-4df0-afb3-6e8badd0c2f8",
+              "name": "posting_mode",
+              "value": "All",
+              "type": "string"
+            },
+            {
+              "id": "2c50400c-8e80-412e-8009-e72b03bd3448",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        -64
+      ],
+      "id": "4e5ec2e9-4814-48e4-a416-284e3976703e",
+      "name": "Post on All"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Post on All",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If (Facebook)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If (instagram)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If x(Twitter)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If (Facebook)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If (instagram)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If x(Twitter)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If (LinkedIn)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If (LinkedIn)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook": {
+      "main": [
+        [
+          {
+            "node": "Fcebook Post Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram": {
+      "main": [
+        [
+          {
+            "node": "Instagram Post Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "x": {
+      "main": [
+        [
+          {
+            "node": "X Post Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn Post Ready",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post on All": {
+      "main": [
+        [
+          {
+            "node": "Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "x",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2c7d5d84-e956-4e6a-9d5b-389321e54360",
+  "meta": {
+    "instanceId": "ea80d7462acd50e30545d2a198d9ce38ce826f00ff426cd5bc4418bc2a55d02c"
+  },
+  "nodeGroups": [],
+  "id": "Tp6HaPpfOwBfH7Cb",
+  "tags": []
+}
