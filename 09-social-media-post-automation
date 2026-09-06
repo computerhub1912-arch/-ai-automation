@@ -1,0 +1,82 @@
+# Social Media Post Automation
+
+An n8n-based social media content posting automation that processes user-created posts and prepares them for publishing across multiple social media platforms.
+
+## Overview
+
+This automation allows users to submit a post title and content through a simple web form. The workflow receives the submitted data through an n8n webhook and processes the selected posting mode.
+
+The workflow supports:
+
+- Post title and content submission
+- ALL platforms mode
+- SPECIFIC platform selection mode
+- Facebook
+- Instagram
+- X (Twitter)
+- LinkedIn
+- Platform-specific workflow routing
+- Post-ready output generation
+
+## Workflow
+
+The automation follows this general process:
+
+Webhook
+→ Posting Mode Check
+→ Platform Selection
+→ Platform Processing
+→ Post Ready Output
+
+## Supported Platforms
+
+- Facebook
+- Instagram
+- X (Twitter)
+- LinkedIn
+
+## Features
+
+### 1. Webhook Input
+
+The workflow receives post information from the web form through an n8n webhook.
+
+### 2. Posting Mode
+
+The user can select:
+
+- ALL – process the post for all supported platforms
+- SPECIFIC – process the post only for selected platforms
+
+### 3. Platform Routing
+
+Conditional nodes determine which platforms should process the submitted post.
+
+### 4. Post Preparation
+
+Each selected platform receives a platform-specific processing step that prepares the post data for publishing.
+
+## Technology Stack
+
+- n8n
+- Node.js
+- JavaScript
+- HTML/CSS/JavaScript
+- Webhooks
+
+## Current Status
+
+The workflow has been tested successfully for webhook input, posting mode detection, platform selection, and post-ready processing.
+
+Actual social media publishing requires connecting the appropriate platform APIs and authentication credentials.
+
+## Project Structure
+
+```text
+09-social-media-post-automation/
+│
+├── social-media-post-automation.json
+├── index.html
+├── style.css
+├── script.js
+└── server.js
