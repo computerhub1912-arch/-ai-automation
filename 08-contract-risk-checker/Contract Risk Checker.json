@@ -1,0 +1,320 @@
+{
+  "name": "Contract Risk Checker",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "e8035ac2-b9b3-48fa-86dc-ba09c6d5771e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\areeb\\.n8n-files\\contract.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "705fdaf4-9df1-41e2-835f-d9e7b9a33c7a",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        0
+      ],
+      "id": "617d4286-bcd9-4b56-91e9-e8aab0ce23f0",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        0
+      ],
+      "id": "221577c1-f201-4ada-b54b-c6355ad1a8f9",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        208
+      ],
+      "id": "bda1476f-ab99-468a-a5a6-4b1970b9dc33",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        336,
+        224
+      ],
+      "id": "d51854de-6068-4013-9e79-f133da800616",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -144,
+        512
+      ],
+      "id": "0884b17e-b1f5-4f0e-8a91-836c81067b03",
+      "name": "When chat message received",
+      "webhookId": "ca17d0b2-5403-4f36-9d9c-81d13d11ea52"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Useful for searching and analyzing contract clauses, including payment terms, termination conditions, liability, penalties, auto-renewal terms, and dispute resolution clauses.",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        512
+      ],
+      "id": "2ed609d3-31b4-4ebf-b9ba-93b5ef724187",
+      "name": "Simple Vector Store1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        112,
+        672
+      ],
+      "id": "ba9fd41a-f951-4ff2-890d-d861f60190b4",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a professional contract risk analyst. A contract document has already been loaded into your knowledge base — do NOT ask the user to upload anything. When the user asks you to analyze it or asks any question about it, use the knowledge base tool to search and retrieve relevant clauses.\n\nYour job is to:\n1. Analyze the contract thoroughly using the knowledge base tool\n2. Identify and flag risky, unusual, or one-sided clauses — especially related to: termination terms, payment penalties, auto-renewal conditions, liability limits, confidentiality, dispute resolution costs, and data ownership\n3. For each risky clause found, classify it as:\n   - 🔴 HIGH RISK: Significantly disadvantages the client, unusual, or financially dangerous\n   - 🟡 MEDIUM RISK: Worth noting but not immediately dangerous\n   - 🟢 LOW RISK / STANDARD: Normal, fair terms\n4. Always explain WHY a clause is risky in simple language\n5. If asked for a summary report, provide an overall risk score out of 10 with a brief justification\n\nCompleteness rule: Before finalizing any summary or full-contract analysis, verify you have checked ALL major clause categories: Termination, Payment Terms, Auto-Renewal, Liability, Confidentiality, Dispute Resolution, and Data Ownership. Do not omit any category from your final report, even if a category is low risk — mention it briefly as \"standard/safe\" if no issue is found.\n\nLanguage rule: Always respond in the same language the user used to ask their question. If the user explicitly requests a specific language, follow that instruction instead.\n\nThe current date and time is {{ $now }}."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        704
+      ],
+      "id": "f2dc26f3-f277-4eca-988a-6ddb1ab06489",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        912
+      ],
+      "id": "01204ef2-7a13-4e42-9404-8d8371063d3d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "OXHqxsGqxgnkI2OG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chunkSize": 300,
+        "chunkOverlap": 50,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        608,
+        336
+      ],
+      "id": "120d8dbd-8eff-4f67-bf85-cddbdd208be5",
+      "name": "Recursive Character Text Splitter"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d2ec225e-0771-49cb-95eb-9e347923cd60",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8ddf7be5ca18279a701d2c87f93f23055abeb6f332951f34a4d4c0cabc502f43"
+  },
+  "nodeGroups": [],
+  "id": "8G4elCDzsDjRq6zD",
+  "tags": []
+}
